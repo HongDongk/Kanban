@@ -5,7 +5,6 @@ import { useRecoilState } from "recoil";
 import { toDoState } from "./atoms";
 import Board from "./Components/Board";
 
-
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
   const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
