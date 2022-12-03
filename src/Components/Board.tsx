@@ -36,8 +36,11 @@ const Wrapper = styled.div`
   min-height: 500px;
 `;
 
-const Title = styled.h2`
+const Title = styled.h1`
+  height:50px;
+  background-color: #E6E6FA;
   text-align: center;
+  line-height:50px;
   font-weight: 600;
   margin-bottom: 30px;
   font-size: 20px;
