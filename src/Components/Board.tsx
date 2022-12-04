@@ -2,23 +2,23 @@ import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import DragabbleCard from "./DragabbleCard";
 
-interface IBoardProps {
-  toDos: string[];
-  boardId: string;
-}
-
 function Board({ toDos, boardId }: IBoardProps) {
   return (
     <Wrapper>
       <Title>{boardId}</Title>
       <Droppable droppableId={boardId}>
-        {(magic) => (
-          <div ref={magic.innerRef} {...magic.droppableProps}>
+        {(magic,info) => (
+          <Area
+            isDraggingOver={info.isDraggingOver}
+            isDraggingFromThis={Boolean(info.draggingFromThisWith)}
+            ref={magic.innerRef}
+            {...magic.droppableProps}
+          >
             {toDos.map((toDo, index) => (
               <DragabbleCard key={toDo} index={index} toDo={toDo} />
             ))}
             {magic.placeholder}
-          </div>
+          </Area>
         )}
       </Droppable>
     </Wrapper>
@@ -27,21 +27,38 @@ function Board({ toDos, boardId }: IBoardProps) {
 
 export default Board;
 
+interface IBoardProps {
+  toDos: string[];
+  boardId: string;
+}
+
+interface IAreaProps {
+  isDraggingFromThis: boolean;
+  isDraggingOver: boolean;
+}
+
 const Wrapper = styled.div`
   width: 400px;
-  padding: 20px 10px;
-  padding-top: 10px;
   background-color: ${(props) => props.theme.boardColor};
   border-radius: 5px;
   min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 `;
 
-const Title = styled.h1`
+const Area = styled.div<IAreaProps>`
+  background-color: ${(props) => props.isDraggingOver ? "#dfe6e9" : props.isDraggingFromThis ? "#b2bec3" : "transparent"};
+  flex-grow: 1;
+  transition: background-color 0.3s ease-in-out;
+  padding: 20px;
+`;
+
+const Title = styled.h2`
   height:50px;
-  background-color: #E6E6FA;
-  text-align: center;
   line-height:50px;
+  text-align: center;
   font-weight: 600;
-  margin-bottom: 30px;
-  font-size: 20px;
+  font-size: 18px;
+  background-color: skyblue;
 `;
