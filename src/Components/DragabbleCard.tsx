@@ -2,10 +2,9 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 
-function DragabbleCard({ toDo, index }: IDragabbleCardProps) {
-  console.log(toDo, "has been rendered");
+function DragabbleCard({ toDoId, toDoText, index }: IDragabbleCardProps) {
   return (
-    <Draggable key={toDo} draggableId={toDo} index={index}>
+    <Draggable draggableId={toDoId + ""} index={index}>
       {(magic, snapshot) => (
         <Card
           isDragging={snapshot.isDragging}
@@ -13,7 +12,7 @@ function DragabbleCard({ toDo, index }: IDragabbleCardProps) {
           {...magic.dragHandleProps}
           {...magic.draggableProps}
         >
-          {toDo}
+          {toDoText}
         </Card>
       )}
     </Draggable>
@@ -23,7 +22,8 @@ function DragabbleCard({ toDo, index }: IDragabbleCardProps) {
 export default React.memo(DragabbleCard); // React Memo: Prop(toDo, index)이 변하지 않으면 리렌더링 방지 - 최적화
 
 interface IDragabbleCardProps {
-  toDo: string;
+  toDoId: number;
+  toDoText: string;
   index: number;
 }
 

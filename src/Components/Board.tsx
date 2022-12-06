@@ -1,11 +1,38 @@
+import { useForm } from "react-hook-form";
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
+import { useSetRecoilState } from "recoil";
 import DragabbleCard from "./DragabbleCard";
 
+import { ITodo, toDoState } from "../atoms";
+
+
 function Board({ toDos, boardId }: IBoardProps) {
+  const setToDos = useSetRecoilState(toDoState);
+  const { register, handleSubmit, setValue } = useForm<IForm>();
+  const onValid = ({ toDo }: IForm) => {
+    const newToDo = {
+      id: Date.now(),
+      text: toDo,
+    };
+    setValue('toDo', '');
+    setToDos((allBoards) => {
+      return {
+        ...allBoards,
+        [boardId]: [newToDo, ...allBoards[boardId]],
+      };
+    });
+  };
   return (
     <Wrapper>
       <Title>{boardId}</Title>
+      <Form onSubmit={handleSubmit(onValid)}>
+        <input
+          {...register("toDo", { required: true })}
+          type="text"
+          placeholder={`${boardId} 추가하기`}
+        />
+      </Form>
       <Droppable droppableId={boardId}>
         {(magic,info) => (
           <Area
@@ -15,7 +42,12 @@ function Board({ toDos, boardId }: IBoardProps) {
             {...magic.droppableProps}
           >
             {toDos.map((toDo, index) => (
-              <DragabbleCard key={toDo} index={index} toDo={toDo} />
+              <DragabbleCard
+                key={toDo.id}
+                index={index}
+                toDoId={toDo.id}
+                toDoText={toDo.text}
+              />
             ))}
             {magic.placeholder}
           </Area>
@@ -28,8 +60,12 @@ function Board({ toDos, boardId }: IBoardProps) {
 export default Board;
 
 interface IBoardProps {
-  toDos: string[];
+  toDos: ITodo[];
   boardId: string;
+}
+
+interface IForm {
+  toDo: string;
 }
 
 interface IAreaProps {
@@ -61,4 +97,11 @@ const Title = styled.h2`
   font-weight: 600;
   font-size: 18px;
   background-color: skyblue;
+`;
+
+const Form = styled.form`
+  width: 100%;
+  input {
+    width: 100%;
+  }
 `;
