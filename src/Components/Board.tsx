@@ -7,10 +7,11 @@ import DragabbleCard from "./DragabbleCard";
 import { ITodo, toDoState } from "../atoms";
 
 
-function Board({ toDos, boardId }: IBoardProps) {
+const Board = ({ toDos, boardId }: IBoardProps) => {
   const setToDos = useSetRecoilState(toDoState);
-  const { register, handleSubmit, setValue } = useForm<IForm>();
+  const { register, handleSubmit, setValue, clearErrors, formState: { errors } } = useForm<IForm>();
   const onValid = ({ toDo }: IForm) => {
+    clearErrors();
     const newToDo = {
       id: Date.now(),
       text: toDo,
@@ -28,10 +29,11 @@ function Board({ toDos, boardId }: IBoardProps) {
       <Title>{boardId}</Title>
       <Form onSubmit={handleSubmit(onValid)}>
         <input
-          {...register("toDo", { required: true })}
+          {...register("toDo", { required: "메세지가 필요합니다" })}
           type="text"
           placeholder={`${boardId} 추가하기`}
         />
+        {errors.toDo && <Error>{errors.toDo.message}</Error>}
       </Form>
       <Droppable droppableId={boardId}>
         {(magic,info) => (
@@ -74,10 +76,10 @@ interface IAreaProps {
 }
 
 const Wrapper = styled.div`
-  width: 400px;
+  width: 300px;
   background-color: ${(props) => props.theme.boardColor};
   border-radius: 5px;
-  min-height: 500px;
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -100,8 +102,26 @@ const Title = styled.h2`
 `;
 
 const Form = styled.form`
-  width: 100%;
+  width:100%;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
   input {
-    width: 100%;
+    padding:5px;
+    margin-top:10px;
+    outline: none;
+    width:85%;
+    height:35px;
+    border-radius:6px;
+    border:none;
   }
+`;
+
+const Error = styled.p`
+  width:100%;
+  color: orangered;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 4px;
 `;

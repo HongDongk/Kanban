@@ -42,6 +42,7 @@ function App() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
+      <Title>KanBan Board</Title>
       <Wrapper>
         <Boards>
           {Object.keys(toDos).map((boardId) => (
@@ -58,16 +59,25 @@ const Wrapper = styled.div`
   width: 100vw;
   margin: 0 auto;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items:center;
+  height:calc(100vh - 50px);
+`;
+
+const Title = styled.div`
+  width: 100%;
+  padding-left: 40px;
+  padding-top:20px;
+  font-size: 50px;
+  font-weight: bold;
+  color: skyblue;
+  height: 50px;
 `;
 
 const Boards = styled.div`
   display: flex;
   justify-content: center;
-  align-items: flex-start;
   width: 100%;
-  gap: 30px;
+  gap: 50px;
 `;
 
 export default App;

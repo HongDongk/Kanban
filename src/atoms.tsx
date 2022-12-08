@@ -1,13 +1,15 @@
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 
 export interface ITodo {
   id: number;
   text: string;
 }
 
-interface IToDoState {
+export interface IToDoState {
   [key: string]: ITodo[];
 }
+
+export const TRELLO_TODO = "TRELLO_TODO";
   
 export const toDoState = atom<IToDoState>({
   key: "toDo",
